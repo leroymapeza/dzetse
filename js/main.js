@@ -71,6 +71,8 @@ function lockLandscape() {
   }
   return Promise.resolve();
 }
+
+async function boot() {
   const loadingEl = createLoadingScreen();
 
   try {
