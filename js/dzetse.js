@@ -1,4 +1,4 @@
-import { ORB_PALETTE, ORB_RADIUS, drawOrb } from './orb_palette.js';
+import { ORB_PALETTE, ORB_RADIUS, drawOrbSprite } from './orb_palette.js';
 const SHOOT_DURATION = 0.1;
 const RECOIL_DURATION = 0.14;
 const SHOOT_COOLDOWN = 0.12;
@@ -166,7 +166,7 @@ export class Dzetse {
 
     const pos = this.getOrbPositions();
     const t = this.time;
-    drawOrb(ctx, pos.current.x, pos.current.y, ORB_PALETTE[this.currentColor], t, ORB_RADIUS * 1.15);
+    drawOrbSprite(ctx, pos.current.x, pos.current.y, this.currentColor, t, ORB_RADIUS * 1.15);
     ctx.save();
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
     ctx.lineWidth = 2;
@@ -176,7 +176,7 @@ export class Dzetse {
     ctx.restore();
     ctx.save();
     ctx.globalAlpha = 0.75;
-    drawOrb(ctx, pos.next.x, pos.next.y, ORB_PALETTE[this.nextColor], t, ORB_RADIUS * 0.85);
+    drawOrbSprite(ctx, pos.next.x, pos.next.y, this.nextColor, t, ORB_RADIUS * 0.85);
     ctx.restore();
   }
 }

@@ -10,6 +10,11 @@ export class HUD {
   addScore(v) { this.score += v; }
   loseLife() { this.lives = Math.max(0, this.lives - 1); }
 
+  _shadowText(ctx, text, x, y) {
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillText(text, x + 1, y + 2);
+  }
+
   render(ctx) {
     const W = this.game.W;
     const H = this.game.H;
@@ -22,22 +27,22 @@ export class HUD {
 
     ctx.font = '700 26px Ubuntu, sans-serif';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#f5d59a';
-    ctx.shadowColor = '#000';
-    ctx.shadowBlur = 6;
     ctx.textAlign = 'left';
+    this._shadowText(ctx, `LIVES: x${this.lives}`, 24, 34);
+    ctx.fillStyle = '#f5d59a';
     ctx.fillText(`LIVES: x${this.lives}`, 24, 34);
 
     ctx.textAlign = 'center';
+    this._shadowText(ctx, `LEVEL ${this.level}`, W / 2 - 180, 34);
     ctx.fillStyle = '#ffd97a';
     ctx.fillText(`LEVEL ${this.level}`, W / 2 - 180, 34);
 
+    this._shadowText(ctx, `SCORE: ${this.score.toLocaleString()}`, W / 2 + 120, 34);
     ctx.fillStyle = '#f5d59a';
     ctx.fillText(`SCORE: ${this.score.toLocaleString()}`, W / 2 + 120, 34);
 
     // Progress bar reflects remaining chain
     const barX = W - 360, barY = 18, barW = 320, barH = 30;
-    ctx.shadowBlur = 0;
     ctx.fillStyle = 'rgba(0,0,0,0.55)';
     this._roundRect(ctx, barX, barY, barW, barH, 14);
     ctx.fill();
@@ -60,23 +65,19 @@ export class HUD {
 
     ctx.font = '900 30px Cinzel, Georgia, serif';
     ctx.textAlign = 'right';
+    this._shadowText(ctx, 'DZETSE!', W - 24, 34);
     ctx.fillStyle = '#ffb040';
-    ctx.shadowColor = '#7a2a00';
-    ctx.shadowBlur = 12;
     ctx.fillText('DZETSE!', W - 24, 34);
-    ctx.shadowBlur = 0;
 
     // Bottom hint
     ctx.font = '700 16px Ubuntu, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(245, 213, 154, 0.75)';
-    ctx.shadowColor = '#000';
-    ctx.shadowBlur = 4;
     const hint = this.game.isTouch
       ? 'TAP THE REAR ORB to swap  •  TAP to fire'
       : 'SPACE or TAP THE REAR ORB to swap  •  CLICK to fire';
+    this._shadowText(ctx, hint, W / 2, H - 18);
+    ctx.fillStyle = 'rgba(245, 213, 154, 0.75)';
     ctx.fillText(hint, W / 2, H - 18);
-    ctx.shadowBlur = 0;
   }
 
   _roundRect(ctx, x, y, w, h, r) {

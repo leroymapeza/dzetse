@@ -54,6 +54,8 @@ export class Game {
       colorCount: this.currentLevel.colorCount
     });
     
+    this._bakePathGlow();
+
     this.platform = new Platform(assets.platform, assets.platform_perspective, this.arenaX, this.arenaY);
     this.dzetse = new Dzetse(assets, this.arenaX, this.arenaY);
     this.orbs = new Orbs();
@@ -171,6 +173,7 @@ export class Game {
     this.boss.setPosition(endPt.x, endPt.y, angleToCenter);
     this.hud.level = this.currentLevel.id;
     this._applyLevelVisuals();
+    this._bakePathGlow();
     this.overlay.setState(STATE.INTRO, { count: 3 });
     this.audio.intro();
   }
@@ -198,8 +201,20 @@ export class Game {
     const angleToCenter = Math.atan2(this.arenaY - endPt.y, this.arenaX - endPt.x);
     this.boss.setPosition(endPt.x, endPt.y, angleToCenter);
     this._applyLevelVisuals();
+    this._bakePathGlow();
     this.overlay.setState(STATE.INTRO, { count: 3 });
     this.audio.intro();
+  }
+
+  _bakePathGlow() {
+    if (!this.pathGlowCanvas) {
+      this.pathGlowCanvas = document.createElement('canvas');
+      this.pathGlowCanvas.width = this.W;
+      this.pathGlowCanvas.height = this.H;
+    }
+    const octx = this.pathGlowCanvas.getContext('2d');
+    octx.clearRect(0, 0, this.W, this.H);
+    this.chain.renderPath(octx);
   }
 
   _shake(mag, time) {
@@ -218,7 +233,8 @@ export class Game {
   }
 
   _resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const maxDpr = (navigator.hardwareConcurrency || 8) <= 4 ? 1 : 2;
+    const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const targetRatio = this.W / this.H;
@@ -327,7 +343,7 @@ export class Game {
     ctx.save();
     ctx.translate(shakeX, shakeY);
     this._drawCover(ctx, this.bgImage, 0, 0, this.W, this.H, BACKGROUND_CROP_ANCHOR_Y);
-    this.chain.renderPath(ctx);
+    if (this.pathGlowCanvas) ctx.drawImage(this.pathGlowCanvas, 0, 0, this.W, this.H);
     this.platform.render(ctx);
     this.boss.render(ctx);
     this.chain.render(ctx, this.chain.time);

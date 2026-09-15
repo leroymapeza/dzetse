@@ -1,4 +1,4 @@
-import { ORB_PALETTE, ORB_RADIUS, drawOrb } from './orb_palette.js';
+import { ORB_PALETTE, ORB_RADIUS, drawOrbSprite } from './orb_palette.js';
 const ORB_SPEED = 900;
 const ORB_LIFETIME = 3.0;
 
@@ -79,7 +79,7 @@ export class Orbs {
         ctx.fill();
       }
       ctx.restore();
-      drawOrb(ctx, o.x, o.y, color, this.time, ORB_RADIUS);
+      drawOrbSprite(ctx, o.x, o.y, o.colorIndex, this.time, ORB_RADIUS);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ORB_PALETTE, ORB_RADIUS, ORB_SPACING, drawOrb } from './orb_palette.js';
+import { ORB_PALETTE, ORB_RADIUS, ORB_SPACING, drawOrbSprite } from './orb_palette.js';
 
 const MIN_MATCH = 3;
 const SETTLE_TIME = 0.12;
@@ -249,7 +249,7 @@ export class Chain {
       const d = this._orbPathDistance(orb);
       if (d < 0 || d > this.path.length) continue;
       const p = this.path.getPointAt(d);
-      drawOrb(ctx, p.x, p.y, ORB_PALETTE[orb.colorIndex], time, ORB_RADIUS);
+      drawOrbSprite(ctx, p.x, p.y, orb.colorIndex, time, ORB_RADIUS);
     }
   }
 

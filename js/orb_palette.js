@@ -89,6 +89,46 @@ const PATTERNS = {
   }
 };
 
+const SPRITE_STEPS = 8;
+const spriteCache = new Map();
+
+function buildSprite(color, radius, pulseScale) {
+  const r = radius * pulseScale;
+  const size = Math.ceil(r * 5.2);
+  const off = document.createElement('canvas');
+  off.width = size;
+  off.height = size;
+  const octx = off.getContext('2d');
+  octx.translate(size / 2, size / 2);
+  drawOrb(octx, 0, 0, color, 0, r);
+  return off;
+}
+
+// Pulse animation is quantized into SPRITE_STEPS pre-rendered bitmaps per
+// color so per-orb rendering is a single drawImage instead of gradients,
+// a clip, and a stroked pattern path every frame.
+export function getOrbSprite(colorIndex, time, radius = ORB_RADIUS) {
+  const color = ORB_PALETTE[colorIndex];
+  const pulse = 1 + Math.sin(time * color.pulseSpeed) * color.pulseAmp;
+  const minScale = 1 - color.pulseAmp;
+  const maxScale = 1 + color.pulseAmp;
+  const t = (pulse - minScale) / (maxScale - minScale);
+  const step = Math.max(0, Math.min(SPRITE_STEPS - 1, Math.round(t * (SPRITE_STEPS - 1))));
+  const key = colorIndex + '_' + radius + '_' + step;
+  let sprite = spriteCache.get(key);
+  if (!sprite) {
+    const scale = minScale + (step / (SPRITE_STEPS - 1)) * (maxScale - minScale);
+    sprite = buildSprite(color, radius, scale);
+    spriteCache.set(key, sprite);
+  }
+  return sprite;
+}
+
+export function drawOrbSprite(ctx, x, y, colorIndex, time, radius = ORB_RADIUS) {
+  const sprite = getOrbSprite(colorIndex, time, radius);
+  ctx.drawImage(sprite, x - sprite.width / 2, y - sprite.height / 2);
+}
+
 export function drawOrb(ctx, x, y, color, time, radius = ORB_RADIUS) {
   const pulse = 1 + Math.sin(time * color.pulseSpeed) * color.pulseAmp;
   const r = radius * pulse;

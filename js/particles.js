@@ -278,8 +278,6 @@ export class Particles {
           ctx.translate(p.x, p.y);
           ctx.rotate(p.rot);
           ctx.fillStyle = p.color.core;
-          ctx.shadowColor = p.color.glow;
-          ctx.shadowBlur = 20;
           ctx.beginPath();
           for (let i = 0; i < points * 2; i++) {
             const r = i % 2 === 0 ? outer : inner;
@@ -317,8 +315,6 @@ export class Particles {
           ctx.save();
           ctx.globalAlpha = t;
           ctx.fillStyle = p.color.core;
-          ctx.shadowColor = p.color.glow;
-          ctx.shadowBlur = 10;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size * t, 0, Math.PI * 2);
           ctx.fill();
