@@ -58,7 +58,19 @@ function createCoverScreen(coverImgEl) {
   return { overlay, button };
 }
 
-async function boot() {
+function requestFullscreen() {
+  const el = document.documentElement;
+  const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if (fn) return fn.call(el).catch(() => {});
+  return Promise.resolve();
+}
+
+function lockLandscape() {
+  if (screen.orientation && screen.orientation.lock) {
+    return screen.orientation.lock('landscape').catch(() => {});
+  }
+  return Promise.resolve();
+}
   const loadingEl = createLoadingScreen();
 
   try {
@@ -76,8 +88,12 @@ async function boot() {
     const { overlay, button } = createCoverScreen(assets.cover);
     button.addEventListener('click', () => {
       overlay.remove();
+      requestFullscreen().then(lockLandscape);
       game.audio.unlock().then(() => game.start());
     }, { once: true });
+
+    document.addEventListener('fullscreenchange', () => window.dispatchEvent(new Event('resize')));
+    document.addEventListener('webkitfullscreenchange', () => window.dispatchEvent(new Event('resize')));
   } catch (err) {
     console.error('Boot failed:', err);
     loadingEl.remove();
