@@ -1,0 +1,25 @@
+{
+  "name": "Dzetse — Guardian of the Wetland",
+  "short_name": "Dzetse",
+  "description": "A Zuma-style orb-matching game set in an African savanna wetland.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#3a1e0f",
+  "theme_color": "#3a1e0f",
+  "icons": [
+    {
+      "src": "assets/cover.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/cover.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
