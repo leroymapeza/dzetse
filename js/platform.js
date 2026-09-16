@@ -12,6 +12,7 @@ export class Platform {
     this.flip = 0; // 0 = default face, 1 = perspective face
     this.onMove = null; // called at the start of each flip (sound cue)
     this.onPerspectiveVisible = null; // called with true/false as perspective art appears/disappears
+    this._perspectiveVisible = false;
   }
 
   _nextInterval() {
@@ -40,6 +41,12 @@ export class Platform {
         if (this.phaseTimer <= 0) this._enterPhase('default');
         break;
     }
+
+    const nowVisible = this.flip > 0.5;
+    if (nowVisible !== this._perspectiveVisible) {
+      this._perspectiveVisible = nowVisible;
+      if (this.onPerspectiveVisible) this.onPerspectiveVisible(nowVisible);
+    }
   }
 
   _enterPhase(phase) {
@@ -48,7 +55,6 @@ export class Platform {
       this.phaseTimer = FLIP_DURATION;
       this.flip = 0;
       if (this.onMove) this.onMove();
-      if (this.onPerspectiveVisible) this.onPerspectiveVisible(true);
     } else if (phase === 'perspective') {
       this.phaseTimer = this._perspectiveHold();
       this.flip = 1;
@@ -59,7 +65,6 @@ export class Platform {
     } else if (phase === 'default') {
       this.phaseTimer = this._nextInterval();
       this.flip = 0;
-      if (this.onPerspectiveVisible) this.onPerspectiveVisible(false);
     }
   }
 

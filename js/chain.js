@@ -63,15 +63,18 @@ export class Chain {
 
   update(dt) {
     this.time += dt;
-    if (this.reachedEnd) return;
 
-    this.traveled += this.speed * dt;
+    if (!this.reachedEnd) {
+      this.traveled += this.speed * dt;
 
-    if (this.recoilOffset !== 0) {
-      this.recoilOffset += (0 - this.recoilOffset) * Math.min(1, dt * 10);
-      if (Math.abs(this.recoilOffset) < 0.05) this.recoilOffset = 0;
+      if (this.recoilOffset !== 0) {
+        this.recoilOffset += (0 - this.recoilOffset) * Math.min(1, dt * 10);
+        if (Math.abs(this.recoilOffset) < 0.05) this.recoilOffset = 0;
+      }
     }
 
+    // Resolve pending matches even after reachedEnd, so a match that was
+    // still settling the instant the head crossed the line isn't lost.
     for (let i = this.pendingMatches.length - 1; i >= 0; i--) {
       const p = this.pendingMatches[i];
       p.timer -= dt;
@@ -81,7 +84,7 @@ export class Chain {
       }
     }
 
-    if (this.orbs.length > 0) {
+    if (!this.reachedEnd && this.orbs.length > 0) {
       const lead = this.orbs[this.orbs.length - 1];
       if (this._orbPathDistance(lead) >= this.path.length) {
         this.reachedEnd = true;
@@ -208,6 +211,9 @@ export class Chain {
       // so the chain's tip genuinely falls back and buys real time.
       this.recoilOffset -= gapSize * 0.3;
     }
+    // Never let the effective head position go negative, or the rearmost
+    // orbs briefly vanish (unrendered/un-hittable) until recoil eases back.
+    this.recoilOffset = Math.max(this.recoilOffset, -this.traveled);
     return removed.length;
   }
 

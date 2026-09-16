@@ -1,6 +1,8 @@
 export class Input {
-  constructor(canvas) {
+  constructor(canvas, gameW, gameH) {
     this.canvas = canvas;
+    this.gameW = gameW;
+    this.gameH = gameH;
     this.aimX = 0;
     this.aimY = 0;
     this.firing = false;
@@ -17,10 +19,11 @@ export class Input {
     const c = this.canvas;
     const update = (clientX, clientY) => {
       const rect = c.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      // Convert to logical game coordinates (0..W, 0..H)
-      this.aimX = ((clientX - rect.left) / rect.width) * (c.width / dpr);
-      this.aimY = ((clientY - rect.top) / rect.height) * (c.height / dpr);
+      // Convert to logical game coordinates (0..gameW, 0..gameH). The canvas's
+      // CSS box always matches the game's aspect ratio, so a plain fraction of
+      // the CSS rect maps directly to game units regardless of devicePixelRatio.
+      this.aimX = ((clientX - rect.left) / rect.width) * this.gameW;
+      this.aimY = ((clientY - rect.top) / rect.height) * this.gameH;
       this.pointerActive = true;
     };
 

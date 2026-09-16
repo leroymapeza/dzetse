@@ -1,7 +1,7 @@
 export class HUD {
   constructor(game) {
     this.game = game;
-    this.lives = 3;
+    this.lives = 4;
     this.score = 0;
     this.level = '1-1';
   }
@@ -52,7 +52,7 @@ export class HUD {
     this._roundRect(ctx, barX, barY, barW, barH, 14);
     ctx.stroke();
 
-    // Progress = how much of the chain has been cleared
+    // Progress = how close the chain's lead orb is to reaching the boss (danger meter)
     const chain = this.game.chain;
     const prog = chain ? chain.progress() : 0;
 

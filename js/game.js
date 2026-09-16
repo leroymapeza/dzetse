@@ -25,9 +25,9 @@ export class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.assets = assets;
-    this.input = new Input(canvas);
     this.W = GAME_W;
     this.H = GAME_H;
+    this.input = new Input(canvas, this.W, this.H);
     this.isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
     this._resize();
     window.addEventListener('resize', () => this._resize());
@@ -150,8 +150,7 @@ export class Game {
     this.levelIndex++;
     if (this.levelIndex >= LEVELS.length) {
       this.levelIndex = LEVELS.length - 1;
-      const last = getLevel(this.levelIndex);
-      this.currentLevel = { ...last, chainSpeed: last.chainSpeed + 20 };
+      this.currentLevel = { ...this.currentLevel, chainSpeed: this.currentLevel.chainSpeed + 8 };
     } else {
       this.currentLevel = getLevel(this.levelIndex);
     }
@@ -181,7 +180,7 @@ export class Game {
   _restartGame() {
     this.levelIndex = 0;
     this.currentLevel = getLevel(this.levelIndex);
-    this.hud.lives = 3;
+    this.hud.lives = 4;
     this.hud.score = 0;
     this.hud.level = this.currentLevel.id;
     this.path = new Path(this.arenaX, this.arenaY, {
