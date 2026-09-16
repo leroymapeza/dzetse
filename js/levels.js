@@ -4,8 +4,8 @@
 export const LEVELS = [
   {
     id: '1-1',
-    chainCount: 12,
-    chainSpeed: 13,
+    chainCount: 8,
+    chainSpeed: 9,
     colorCount: 3,
     turns: 1.7,
     rOuter: 300,
@@ -15,8 +15,8 @@ export const LEVELS = [
   },
   {
     id: '1-2',
-    chainCount: 16,
-    chainSpeed: 15,
+    chainCount: 10,
+    chainSpeed: 10,
     colorCount: 3,
     turns: 1.85,
     rOuter: 300,
@@ -26,8 +26,8 @@ export const LEVELS = [
   },
   {
     id: '1-3',
-    chainCount: 20,
-    chainSpeed: 17,
+    chainCount: 12,
+    chainSpeed: 11,
     colorCount: 3,
     turns: 2.0,
     rOuter: 300,
@@ -37,9 +37,9 @@ export const LEVELS = [
   },
   {
     id: '2-1',
-    chainCount: 24,
-    chainSpeed: 20,
-    colorCount: 4,
+    chainCount: 14,
+    chainSpeed: 13,
+    colorCount: 3,
     turns: 2.2,
     rOuter: 300,
     rInner: 135,
@@ -48,8 +48,8 @@ export const LEVELS = [
   },
   {
     id: '2-2',
-    chainCount: 29,
-    chainSpeed: 23,
+    chainCount: 17,
+    chainSpeed: 14,
     colorCount: 4,
     turns: 2.4,
     rOuter: 305,
@@ -59,8 +59,8 @@ export const LEVELS = [
   },
   {
     id: '2-3',
-    chainCount: 34,
-    chainSpeed: 26,
+    chainCount: 20,
+    chainSpeed: 16,
     colorCount: 4,
     turns: 2.6,
     rOuter: 310,

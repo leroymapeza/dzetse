@@ -150,7 +150,7 @@ export class Game {
     this.levelIndex++;
     if (this.levelIndex >= LEVELS.length) {
       this.levelIndex = LEVELS.length - 1;
-      this.currentLevel = { ...this.currentLevel, chainSpeed: this.currentLevel.chainSpeed + 8 };
+      this.currentLevel = { ...this.currentLevel, chainSpeed: this.currentLevel.chainSpeed + 4 };
     } else {
       this.currentLevel = getLevel(this.levelIndex);
     }
