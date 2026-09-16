@@ -76,6 +76,7 @@ export class Game {
       else this.dzetse.releaseGlance();
     };
     this.frogTimer = 6 + Math.random() * 10;
+    this.crocGrowlTimer = 5 + Math.random() * 7;
     
     // Unlock audio on first user gesture
     this.input.onFirstGesture = () => { this.audio.unlock(); };
@@ -310,6 +311,12 @@ export class Game {
     if (this.frogTimer <= 0) {
       this.audio.frogCroak();
       this.frogTimer = 8 + Math.random() * 14;
+    }
+
+    this.crocGrowlTimer -= dt;
+    if (this.crocGrowlTimer <= 0) {
+      this.audio.crocGrowl();
+      this.crocGrowlTimer = 9 + Math.random() * 12;
     }
 
     // Shoot logic — tapping near the rear (next) orb swaps instead of firing
