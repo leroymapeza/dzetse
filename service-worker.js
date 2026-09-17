@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dzetse-v15';
+const CACHE_NAME = 'dzetse-v16';
 const ASSETS = [
   './',
   './index.html',

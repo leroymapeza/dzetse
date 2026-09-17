@@ -150,9 +150,20 @@ export class Game {
   _advanceLevel() {
     this.levelIndex++;
     if (this.levelIndex >= LEVELS.length) {
+      // Endless mode past the last designed level: keep ramping every stat
+      // instead of just speed, capped so it stays winnable.
+      this.endlessBumps = (this.endlessBumps ?? 0) + 1;
+      const base = LEVELS[LEVELS.length - 1];
+      this.currentLevel = {
+        ...base,
+        id: `${base.id}+${this.endlessBumps}`,
+        chainSpeed: base.chainSpeed + this.endlessBumps * 1.2,
+        chainCount: Math.min(base.chainCount + this.endlessBumps * 2, 60),
+        colorCount: Math.min(ORB_PALETTE.length, base.colorCount + Math.floor(this.endlessBumps / 2))
+      };
       this.levelIndex = LEVELS.length - 1;
-      this.currentLevel = { ...this.currentLevel, chainSpeed: this.currentLevel.chainSpeed + 4 };
     } else {
+      this.endlessBumps = 0;
       this.currentLevel = getLevel(this.levelIndex);
     }
     this.path = new Path(this.arenaX, this.arenaY, {
@@ -180,6 +191,7 @@ export class Game {
 
   _restartGame() {
     this.levelIndex = 0;
+    this.endlessBumps = 0;
     this.currentLevel = getLevel(this.levelIndex);
     this.hud.lives = 4;
     this.hud.score = 0;
